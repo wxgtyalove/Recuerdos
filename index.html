@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galería de Recuerdos</title>
+
+  <!-- Tipografías: Playfair Display (títulos) + Poppins (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          colors: {
+            crema: '#FAF6F0',
+            arena: '#F1E9DD',
+            dorado: '#C9A66B',
+            doradoOscuro: '#A8844A',
+            rosaPastel: '#F4C9C9',
+            tinta: '#3F3A34',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- FontAwesome (iconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    body { background-color: #FAF6F0; }
+
+    /* Masonry con columnas CSS */
+    .masonry { column-gap: 1.25rem; columns: 1; }
+    @media (min-width: 640px)  { .masonry { columns: 2; } }
+    @media (min-width: 1024px) { .masonry { columns: 3; } }
+    .masonry-item { break-inside: avoid; margin-bottom: 1.25rem; }
+
+    /* Animación de aparición de tarjetas */
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(14px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .aparecer { animation: aparecer .5s ease both; }
+
+    /* Latido del corazón al dar "me gusta" */
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      40%      { transform: scale(1.45); }
+      70%      { transform: scale(.9); }
+    }
+    .latido { animation: latido .45s ease; }
+
+    /* Modal */
+    #modal.abierto { opacity: 1; pointer-events: auto; }
+    #modal.abierto #modal-panel { transform: scale(1) translateY(0); opacity: 1; }
+
+    /* Fondo decorativo del hero */
+    .hero-glow {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(244,201,201,.55), transparent 45%),
+        radial-gradient(circle at 85% 10%, rgba(201,166,107,.35), transparent 40%),
+        radial-gradient(circle at 60% 90%, rgba(241,233,221,.9), transparent 50%);
+    }
+  </style>
+</head>
+
+<body class="font-sans text-tinta antialiased">
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero-glow relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
+      <div class="flex items-center justify-center gap-3 text-dorado mb-6">
+        <span class="h-px w-12 bg-dorado/60"></span>
+        <i class="fa-solid fa-camera-retro"></i>
+        <span class="h-px w-12 bg-dorado/60"></span>
+      </div>
+
+      <h1 class="font-serif text-4xl sm:text-6xl font-medium leading-tight">
+        Nuestros <em class="text-doradoOscuro">Momentos</em> Especiales
+      </h1>
+
+      <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg font-light text-tinta/70">
+        Una colección de instantes que nos hicieron sonreír: viajes, celebraciones
+        y personas que hacen la vida más bonita. Cada foto guarda una historia.
+      </p>
+
+      <a href="#galeria"
+         class="inline-flex items-center gap-2 mt-10 px-7 py-3 rounded-full bg-tinta text-crema text-sm font-medium
+                hover:bg-doradoOscuro transition-colors duration-300 shadow-lg shadow-tinta/10">
+        Ver recuerdos <i class="fa-solid fa-arrow-down text-xs"></i>
+      </a>
+    </div>
+  </header>
+
+  <main id="galeria" class="max-w-6xl mx-auto px-6 py-14">
+
+    <!-- ===================== FILTROS ===================== -->
+    <nav id="filtros" class="flex flex-wrap justify-center gap-3 mb-12" aria-label="Filtrar por categoría">
+      <button data-filtro="todos"        class="filtro-btn">Todos</button>
+      <button data-filtro="especiales"   class="filtro-btn">Momentos Especiales</button>
+    </nav>
+
+    <!-- ===================== GRID MASONRY ===================== -->
+    <section id="grid" class="masonry" aria-live="polite"></section>
+
+    <p id="vacio" class="hidden text-center text-tinta/50 py-16">
+      Aún no hay recuerdos en esta categoría.
+    </p>
+  </main>
+
+  <!-- ===================== MODAL ===================== -->
+  <div id="modal"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-tinta/80 backdrop-blur-sm
+              opacity-0 pointer-events-none transition-opacity duration-300"
+       role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+
+    <div id="modal-panel"
+         class="relative w-full max-w-4xl max-h-[92vh] overflow-hidden rounded-3xl bg-crema shadow-2xl
+                grid md:grid-cols-5 opacity-0 scale-95 translate-y-3 transition-all duration-300">
+
+      <!-- Botón cerrar -->
+      <button id="modal-cerrar" aria-label="Cerrar"
+              class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 text-tinta
+                     hover:bg-doradoOscuro hover:text-white transition-colors shadow">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Imagen grande -->
+      <div class="md:col-span-3 bg-arena relative">
+        <img id="modal-img" src="" alt="" class="w-full h-64 md:h-full max-h-[92vh] object-cover" />
+
+        <!-- Navegación anterior / siguiente -->
+        <button id="modal-prev" aria-label="Anterior"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 hover:bg-white shadow transition">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="modal-next" aria-label="Siguiente"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 hover:bg-white shadow transition">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Texto del recuerdo -->
+      <div class="md:col-span-2 p-7 sm:p-9 flex flex-col overflow-y-auto">
+        <span id="modal-cat" class="text-xs uppercase tracking-[.2em] text-dorado font-medium"></span>
+        <h2 id="modal-titulo" class="font-serif text-3xl mt-2 leading-snug"></h2>
+        <p id="modal-fecha" class="text-sm text-tinta/50 mt-1"></p>
+        <div class="w-12 h-px bg-dorado my-5"></div>
+        <p id="modal-desc" class="font-light leading-relaxed text-tinta/80"></p>
+
+        <button id="modal-like"
+                class="mt-auto pt-8 self-start inline-flex items-center gap-2 text-sm text-tinta/70 hover:text-tinta transition">
+          <i class="fa-solid fa-heart text-lg"></i>
+          <span><span id="modal-likes">0</span> me gusta</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="mt-10 border-t border-dorado/30 bg-arena/60">
+    <div class="max-w-3xl mx-auto px-6 py-14 text-center">
+      <i class="fa-solid fa-heart text-rosaPastel text-2xl"></i>
+      <p class="font-serif text-2xl sm:text-3xl mt-4 italic text-tinta">
+        "Los mejores momentos no se planean, se viven y se recuerdan."
+      </p>
+      <p class="mt-4 text-sm font-light text-tinta/60">
+        Gracias por ser parte de cada historia.
+      </p>
+      <p class="mt-10 text-xs text-tinta/40">
+        Diseñado con <i class="fa-solid fa-heart text-rosaPastel"></i> · Galería de Recuerdos · <span id="anio"></span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Estilos de los botones de filtro (componentes reutilizables) -->
+  <style type="text/tailwindcss">
+    @layer components {
+      .filtro-btn {
+        @apply px-5 py-2 rounded-full text-sm font-medium border border-dorado/40 text-tinta/70 bg-white/60
+               transition-all duration-300 hover:border-dorado hover:text-tinta;
+      }
+      .filtro-btn.activo {
+        @apply bg-tinta text-crema border-tinta shadow-md;
+      }
+    }
+  </style>
+
+  <script>
+    /* ==========================================================
+       1. DATOS DE LOS RECUERDOS
+       Las imágenes se cargan desde la carpeta de esta página.
+       ========================================================== */
+    const recuerdos = [
+      { id: 1,  cat: 'viajes',     titulo: 'Atardecer en la montaña',   fecha: 'Julio 2025',
+        img: '20250724_214809.jpg', alto: 'h-80',
+        desc: 'Subimos antes del amanecer y la espera valió cada paso. El cielo se pintó de dorado y nadie dijo una palabra.' },
+      { id: 2,  cat: 'cumpleanos', titulo: 'Velitas y deseos',          fecha: 'Agosto 2025',
+        img: '20250725_110858.jpg', alto: 'h-64',
+        desc: 'Pedimos un deseo entre risas y desafinando el "Cumpleaños feliz". El mejor pastel, sin duda.' },
+      { id: 3,  cat: 'amigos',     titulo: 'Tarde de risas',            fecha: 'Septiembre 2025',
+        img: '20250829_091152 (1).jpg', alto: 'h-72',
+        desc: 'Una tarde cualquiera que se volvió inolvidable. Bastó estar juntos para que todo fuera perfecto.' },
+      { id: 4,  cat: 'especiales', titulo: 'El día que lo cambió todo', fecha: 'Octubre 2025',
+        img: '20250829_091152.jpg', alto: 'h-96',
+        desc: 'Hay días que se quedan para siempre. Ese abrazo, esa sonrisa y ese "sí" siguen siendo nuestro tesoro.' },
+      { id: 5,  cat: 'viajes',     titulo: 'Camino al lago',            fecha: 'Junio 2025',
+        img: '20250829_091153.jpg', alto: 'h-64',
+        desc: 'Perdernos fue lo mejor del viaje: encontramos un lago escondido que no estaba en ningún mapa.' },
+      { id: 6,  cat: 'amigos',     titulo: 'Noche de confidencias',     fecha: 'Mayo 2025',
+        img: '20250829_091335.jpg', alto: 'h-80',
+        desc: 'Charlamos hasta que se acabó la noche. Los amigos de verdad se reconocen en los silencios cómodos.' },
+      { id: 7,  cat: 'cumpleanos', titulo: 'Fiesta de confeti',         fecha: 'Noviembre 2024',
+        img: '20250918_185535.jpg', alto: 'h-72',
+        desc: 'Globos, música y mucho confeti. Una celebración que todavía encontramos en los bolsillos de las chaquetas.' },
+      { id: 8,  cat: 'viajes',     titulo: 'Canales y calles antiguas', fecha: 'Abril 2025',
+        img: '20251026_180928.jpg', alto: 'h-96',
+        desc: 'Caminamos sin rumbo entre puentes y callejones. Cada esquina parecía una postal esperando ser vivida.' },
+      { id: 9,  cat: 'especiales', titulo: 'Verde y calma',             fecha: 'Marzo 2025',
+        img: '20251026_183112.jpg', alto: 'h-64',
+        desc: 'Un domingo lento, con el sol entre los árboles. A veces la felicidad es simplemente quedarse quieto.' },
+      { id: 10, cat: 'amigos',     titulo: 'Juntos, otra vez',          fecha: 'Diciembre 2024',
+        img: '20251124_072701.jpg', alto: 'h-80',
+        desc: 'Reencuentro de fin de año. Pasó el tiempo, pero la complicidad seguía intacta.' },
+      { id: 11, cat: 'especiales', titulo: 'Rumbo a la costa',          fecha: 'Enero 2025',
+        img: '20251201_115614.jpg', alto: 'h-72',
+        desc: 'Mar, arena y cero prisa. Guardamos el sonido de las olas como banda sonora del verano.' },
+      { id: 12, cat: 'viajes',     titulo: 'Ruta sin destino',          fecha: 'Febrero 2025',
+        img: 'IMG-20250916-WA0016.jpeg', alto: 'h-64',
+        desc: 'Mochila al hombro y la curiosidad por delante. Ese viaje nos enseñó a disfrutar el camino.' },
+      { id: 13, cat: 'especiales', titulo: 'Un recuerdo especial',      fecha: 'Septiembre 2025',
+        img: 'IMG-20251010-WA0090.jpeg', alto: 'h-80',
+        desc: 'Un instante para volver a mirar y recordar.' },
+      { id: 14, cat: 'especiales', titulo: 'Un día para recordar',      fecha: 'Junio 2024',
+        img: 'Screenshot_20240608-221700_Instagram.jpg', alto: 'h-72',
+        desc: 'Un instante para volver a mirar y recordar.' },
+      { id: 15, cat: 'especiales', titulo: 'Un momento juntos',         fecha: 'Junio 2024',
+        img: 'Screenshot_20240623-192805_Gallery.jpg', alto: 'h-80',
+        desc: 'Un instante para volver a mirar y recordar.' },
+      { id: 16, cat: 'especiales', titulo: 'Un recuerdo más',            fecha: 'Agosto 2025',
+        img: 'Screenshot_20250811_221300_Gallery.jpg', alto: 'h-72',
+        desc: 'Mochila al hombro y la curiosidad por delante. Ese viaje nos enseñó a disfrutar el camino.' },
+    ];
+
+    /* ==========================================================
+       2. ESTADO Y UTILIDADES
+       ========================================================== */
+    const NOMBRES_CAT = {
+      viajes: 'Viajes', cumpleanos: 'Cumpleaños', amigos: 'Amigos', especiales: 'Momentos Especiales'
+    };
+
+    let filtroActual = 'todos';
+    let visibles = [];       // recuerdos actualmente mostrados (para navegar en el modal)
+    let indiceModal = -1;    // posición del recuerdo abierto dentro de "visibles"
+
+    // "Me gusta": se guarda en localStorage para que persistan al recargar
+    const LS_KEY = 'galeria-recuerdos-likes';
+    let likes = {};          // { id: { n: cantidad, liked: boolean } }
+
+    try { likes = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { likes = {}; }
+    recuerdos.forEach(r => { if (!likes[r.id]) likes[r.id] = { n: 3 + (r.id * 7) % 18, liked: false }; });
+
+    const guardarLikes = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(likes)); } catch (e) {} };
+
+    const $ = (sel) => document.querySelector(sel);
+    const grid = $('#grid');
+
+    /* ==========================================================
+       3. RENDER DE LA GALERÍA
+       ========================================================== */
+    function renderGrid() {
+      visibles = recuerdos.filter(r => filtroActual === 'todos' || r.cat === filtroActual);
+      grid.innerHTML = '';
+      $('#vacio').classList.toggle('hidden', visibles.length > 0);
+
+      visibles.forEach((r, i) => {
+        const l = likes[r.id];
+        const card = document.createElement('article');
+        card.className = 'masonry-item aparecer';
+        card.style.animationDelay = `${i * 60}ms`;
+        card.innerHTML = `
+          <div class="group relative overflow-hidden rounded-2xl bg-arena shadow-md hover:shadow-xl
+                      transition-shadow duration-500 cursor-pointer" data-abrir="${i}">
+            <img src="${r.img}" alt="${r.titulo}" loading="lazy"
+                 class="w-full ${r.alto} object-cover transition-transform duration-700 group-hover:scale-105"
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,${encodeURIComponent(
+                   '<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23F1E9DD%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23C9A66B%22 font-size=%2224%22 text-anchor=%22middle%22>Recuerdo</text></svg>'
+                 )}'" />
+
+            <!-- Capa con título y fecha (aparece al hacer hover) -->
+            <div class="absolute inset-0 bg-gradient-to-t from-tinta/80 via-tinta/10 to-transparent
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-500
+                        flex flex-col justify-end p-5">
+              <p class="text-xs uppercase tracking-widest text-dorado">${NOMBRES_CAT[r.cat]}</p>
+              <h3 class="font-serif text-xl text-white translate-y-2 group-hover:translate-y-0 transition-transform duration-500">${r.titulo}</h3>
+              <p class="text-xs text-white/70 mt-0.5">${r.fecha}</p>
+            </div>
+
+            <!-- Botón de me gusta -->
+            <button data-like="${r.id}" aria-label="Me gusta"
+                    class="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full
+                           bg-white/90 backdrop-blur text-xs font-medium shadow hover:bg-white transition">
+              <i class="fa-solid fa-heart ${l.liked ? 'text-rose-500' : 'text-tinta/30'} transition-colors"></i>
+              <span data-contador="${r.id}">${l.n}</span>
+            </button>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ==========================================================
+       4. FILTRADO POR CATEGORÍA
+       ========================================================== */
+    function marcarFiltroActivo() {
+      document.querySelectorAll('.filtro-btn').forEach(b =>
+        b.classList.toggle('activo', b.dataset.filtro === filtroActual));
+    }
+
+    $('#filtros').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filtro-btn');
+      if (!btn) return;
+      filtroActual = btn.dataset.filtro;
+      marcarFiltroActivo();
+      renderGrid();
+    });
+
+    /* ==========================================================
+       5. ME GUSTA (corazón + contador)
+       ========================================================== */
+    function alternarLike(id) {
+      const l = likes[id];
+      l.liked = !l.liked;
+      l.n += l.liked ? 1 : -1;
+      guardarLikes();
+      actualizarLikeUI(id, true);
+    }
+
+    // Actualiza tarjeta y modal (si está abierto con ese recuerdo)
+    function actualizarLikeUI(id, animar = false) {
+      const l = likes[id];
+
+      const contador = document.querySelector(`[data-contador="${id}"]`);
+      const icono = document.querySelector(`[data-like="${id}"] i`);
+      if (contador) contador.textContent = l.n;
+      if (icono) {
+        icono.classList.toggle('text-rose-500', l.liked);
+        icono.classList.toggle('text-tinta/30', !l.liked);
+        if (animar) { icono.classList.remove('latido'); void icono.offsetWidth; icono.classList.add('latido'); }
+      }
+
+      if (indiceModal >= 0 && visibles[indiceModal].id === id) {
+        $('#modal-likes').textContent = l.n;
+        const mi = $('#modal-like i');
+        mi.classList.toggle('text-rose-500', l.liked);
+        mi.classList.toggle('text-tinta/30', !l.liked);
+        if (animar) { mi.classList.remove('latido'); void mi.offsetWidth; mi.classList.add('latido'); }
+      }
+    }
+
+    /* ==========================================================
+       6. MODAL (abrir, cerrar, navegar)
+       ========================================================== */
+    const modal = $('#modal');
+
+    function abrirModal(i) {
+      indiceModal = i;
+      const r = visibles[i];
+      $('#modal-img').src = r.img;
+      $('#modal-img').alt = r.titulo;
+      $('#modal-cat').textContent = NOMBRES_CAT[r.cat];
+      $('#modal-titulo').textContent = r.titulo;
+      $('#modal-fecha').textContent = r.fecha;
+      $('#modal-desc').textContent = r.desc;
+      actualizarLikeUI(r.id);
+      modal.classList.add('abierto');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModal() {
+      modal.classList.remove('abierto');
+      document.body.style.overflow = '';
+      indiceModal = -1;
+    }
+
+    function navegarModal(dir) {
+      if (indiceModal < 0) return;
+      abrirModal((indiceModal + dir + visibles.length) % visibles.length);
+    }
+
+    // Clics dentro del grid (abrir modal o dar like) — delegación de eventos
+    grid.addEventListener('click', (e) => {
+      const likeBtn = e.target.closest('[data-like]');
+      if (likeBtn) { e.stopPropagation(); alternarLike(Number(likeBtn.dataset.like)); return; }
+      const tarjeta = e.target.closest('[data-abrir]');
+      if (tarjeta) abrirModal(Number(tarjeta.dataset.abrir));
+    });
+
+    $('#modal-cerrar').addEventListener('click', cerrarModal);
+    $('#modal-prev').addEventListener('click', () => navegarModal(-1));
+    $('#modal-next').addEventListener('click', () => navegarModal(1));
+    $('#modal-like').addEventListener('click', () => alternarLike(visibles[indiceModal].id));
+
+    // Cerrar al hacer clic fuera del panel
+    modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+
+    // Atajos de teclado: Esc cierra, flechas navegan
+    document.addEventListener('keydown', (e) => {
+      if (indiceModal < 0) return;
+      if (e.key === 'Escape') cerrarModal();
+      if (e.key === 'ArrowLeft') navegarModal(-1);
+      if (e.key === 'ArrowRight') navegarModal(1);
+    });
+
+    /* ==========================================================
+       7. INICIO
+       ========================================================== */
+    $('#anio').textContent = new Date().getFullYear();
+    marcarFiltroActivo();
+    renderGrid();
+  </script>
+</body>
+</html>
