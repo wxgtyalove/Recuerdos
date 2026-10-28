@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galería de Recuerdos</title>
+  <title>GalerÃ­a de Recuerdos</title>
 
-  <!-- Tipografías: Playfair Display (títulos) + Poppins (texto) -->
+  <!-- TipografÃ­as: Playfair Display (tÃ­tulos) + Poppins (texto) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -45,14 +45,14 @@
     @media (min-width: 1024px) { .masonry { columns: 3; } }
     .masonry-item { break-inside: avoid; margin-bottom: 1.25rem; }
 
-    /* Animación de aparición de tarjetas */
+    /* AnimaciÃ³n de apariciÃ³n de tarjetas */
     @keyframes aparecer {
       from { opacity: 0; transform: translateY(14px) scale(.98); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     .aparecer { animation: aparecer .5s ease both; }
 
-    /* Latido del corazón al dar "me gusta" */
+    /* Latido del corazÃ³n al dar "me gusta" */
     @keyframes latido {
       0%, 100% { transform: scale(1); }
       40%      { transform: scale(1.45); }
@@ -90,8 +90,8 @@
       </h1>
 
       <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg font-light text-tinta/70">
-        Una colección de instantes que nos hicieron sonreír: viajes, celebraciones
-        y personas que hacen la vida más bonita. Cada foto guarda una historia.
+        Una colecciÃ³n de instantes que nos hicieron sonreÃ­r: viajes, celebraciones
+        y personas que hacen la vida mÃ¡s bonita. Cada foto guarda una historia.
       </p>
 
       <a href="#galeria"
@@ -105,7 +105,7 @@
   <main id="galeria" class="max-w-6xl mx-auto px-6 py-14">
 
     <!-- ===================== FILTROS ===================== -->
-    <nav id="filtros" class="flex flex-wrap justify-center gap-3 mb-12" aria-label="Filtrar por categoría">
+    <nav id="filtros" class="flex flex-wrap justify-center gap-3 mb-12" aria-label="Filtrar por categorÃ­a">
       <button data-filtro="todos"        class="filtro-btn">Todos</button>
       <button data-filtro="especiales"   class="filtro-btn">Momentos Especiales</button>
     </nav>
@@ -114,9 +114,24 @@
     <section id="grid" class="masonry" aria-live="polite"></section>
 
     <p id="vacio" class="hidden text-center text-tinta/50 py-16">
-      Aún no hay recuerdos en esta categoría.
+      AÃºn no hay recuerdos en esta categorÃ­a.
     </p>
   </main>
+
+  <!-- ===================== MÃšSICA ===================== -->
+  <section id="musica" class="max-w-3xl mx-auto px-6 pb-14" aria-labelledby="musica-titulo">
+    <div class="rounded-3xl border border-dorado/30 bg-white/70 p-7 sm:p-10 text-center shadow-sm">
+      <i class="fa-solid fa-music text-dorado text-2xl" aria-hidden="true"></i>
+      <h2 id="musica-titulo" class="font-serif text-3xl mt-3">Una canciÃ³n para acompaÃ±ar los recuerdos</h2>
+      <p class="mt-3 mb-6 text-sm font-light text-tinta/70">
+        Dale al play y disfruta la galerÃ­a con mÃºsica.
+      </p>
+      <audio class="w-full" controls preload="metadata">
+        <source src="Hey Lover.mp3" type="audio/mpeg" />
+        Tu navegador no puede reproducir este audio.
+      </audio>
+    </div>
+  </section>
 
   <!-- ===================== MODAL ===================== -->
   <div id="modal"
@@ -128,7 +143,7 @@
          class="relative w-full max-w-4xl max-h-[92vh] overflow-hidden rounded-3xl bg-crema shadow-2xl
                 grid md:grid-cols-5 opacity-0 scale-95 translate-y-3 transition-all duration-300">
 
-      <!-- Botón cerrar -->
+      <!-- BotÃ³n cerrar -->
       <button id="modal-cerrar" aria-label="Cerrar"
               class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 text-tinta
                      hover:bg-doradoOscuro hover:text-white transition-colors shadow">
@@ -139,7 +154,7 @@
       <div class="md:col-span-3 bg-arena relative">
         <img id="modal-img" src="" alt="" class="w-full h-64 md:h-full max-h-[92vh] object-cover" />
 
-        <!-- Navegación anterior / siguiente -->
+        <!-- NavegaciÃ³n anterior / siguiente -->
         <button id="modal-prev" aria-label="Anterior"
                 class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 hover:bg-white shadow transition">
           <i class="fa-solid fa-chevron-left"></i>
@@ -178,7 +193,7 @@
         Gracias por ser parte de cada historia.
       </p>
       <p class="mt-10 text-xs text-tinta/40">
-        Diseñado con <i class="fa-solid fa-heart text-rosaPastel"></i> · Galería de Recuerdos · <span id="anio"></span>
+        DiseÃ±ado con <i class="fa-solid fa-heart text-rosaPastel"></i> Â· GalerÃ­a de Recuerdos Â· <span id="anio"></span>
       </p>
     </div>
   </footer>
@@ -199,69 +214,147 @@
   <script>
     /* ==========================================================
        1. DATOS DE LOS RECUERDOS
-       Las imágenes se cargan desde la carpeta de esta página.
+       Las imÃ¡genes se cargan desde la carpeta de esta pÃ¡gina.
        ========================================================== */
     const recuerdos = [
-      { id: 1,  cat: 'viajes',     titulo: 'Atardecer en la montaña',   fecha: 'Julio 2025',
+      { id: 1,  cat: 'Un cumpleaÃ±os',     titulo: 'Un cumpleaÃ±os en familia',   fecha: '',
         img: '20250724_214809.jpg', alto: 'h-80',
-        desc: 'Subimos antes del amanecer y la espera valió cada paso. El cielo se pintó de dorado y nadie dijo una palabra.' },
-      { id: 2,  cat: 'cumpleanos', titulo: 'Velitas y deseos',          fecha: 'Agosto 2025',
+        desc: 'Entre la torta, las sonrisas y la familia reunida, quedÃ³ guardado un momento especial. A veces no todo sale como uno quisiera, pero el cariÃ±o permanece.' },
+      { id: 2,  cat: '', titulo: 'La calidez de un hogar',          fecha: '',
         img: '20250725_110858.jpg', alto: 'h-64',
-        desc: 'Pedimos un deseo entre risas y desafinando el "Cumpleaños feliz". El mejor pastel, sin duda.' },
-      { id: 3,  cat: 'amigos',     titulo: 'Tarde de risas',            fecha: 'Septiembre 2025',
+        desc: 'La madera, las flores y la luz del dÃ­a hacen de esta entrada un rincÃ³n acogedor; de esos lugares que invitan a sentirse en casa.' },
+      { id: 3,  cat: 'amigos',     titulo: 'Orgullo de nuestras raÃ­ces',                          fecha: '',
         img: '20250829_091152 (1).jpg', alto: 'h-72',
-        desc: 'Una tarde cualquiera que se volvió inolvidable. Bastó estar juntos para que todo fuera perfecto.' },
-      { id: 4,  cat: 'especiales', titulo: 'El día que lo cambió todo', fecha: 'Octubre 2025',
+        desc: 'Una foto llena de color, tradiciÃ³n y compaÃ±erismo. Los trajes tÃ­picos y las sonrisas convierten el encuentro en un recuerdo para celebrar.' },
+      { id: 4,  cat: 'especiales', titulo: 'TradiciÃ³n que se lleva con orgullo',                          fecha: '',
         img: '20250829_091152.jpg', alto: 'h-96',
-        desc: 'Hay días que se quedan para siempre. Ese abrazo, esa sonrisa y ese "sí" siguen siendo nuestro tesoro.' },
-      { id: 5,  cat: 'viajes',     titulo: 'Camino al lago',            fecha: 'Junio 2025',
+        desc: 'Bajo el cielo despejado, el rojo del vestido resalta con toda su alegrÃ­a. Un instante para guardar la belleza y el orgullo de las propias raÃ­ces.' },
+      { id: 5,  cat: 'viajes',     titulo: 'Un instante cerquita',                          fecha: '',
         img: '20250829_091153.jpg', alto: 'h-64',
-        desc: 'Perdernos fue lo mejor del viaje: encontramos un lago escondido que no estaba en ningún mapa.' },
-      { id: 6,  cat: 'amigos',     titulo: 'Noche de confidencias',     fecha: 'Mayo 2025',
+        desc: 'Una selfie espontÃ¡nea, una mirada tranquila y ese detalle delicado al cuello: a veces una imagen sencilla guarda mucha ternura.' },
+      { id: 6,  cat: 'amigos',     titulo: 'Una pose con mucha actitud',                          fecha: '',
         img: '20250829_091335.jpg', alto: 'h-80',
-        desc: 'Charlamos hasta que se acabó la noche. Los amigos de verdad se reconocen en los silencios cómodos.' },
-      { id: 7,  cat: 'cumpleanos', titulo: 'Fiesta de confeti',         fecha: 'Noviembre 2024',
+        desc: 'Una pose divertida frente a la cÃ¡mara y una sonrisa que se roba la foto. Los momentos mÃ¡s simples tambiÃ©n terminan siendo los favoritos.' },
+      { id: 7,  cat: 'cumpleanos', titulo: 'Un instante de calma',                          fecha: '',
         img: '20250918_185535.jpg', alto: 'h-72',
-        desc: 'Globos, música y mucho confeti. Una celebración que todavía encontramos en los bolsillos de las chaquetas.' },
-      { id: 8,  cat: 'viajes',     titulo: 'Canales y calles antiguas', fecha: 'Abril 2025',
+        desc: 'Con los ojos cerrados y el rostro en calma, esta foto guarda una pausa Ã­ntima y tranquila, lejos de las prisas del dÃ­a.' },
+      { id: 8,  cat: 'viajes',     titulo: 'Un logro que se celebra juntos',                          fecha: '',
         img: '20251026_180928.jpg', alto: 'h-96',
-        desc: 'Caminamos sin rumbo entre puentes y callejones. Cada esquina parecía una postal esperando ser vivida.' },
-      { id: 9,  cat: 'especiales', titulo: 'Verde y calma',             fecha: 'Marzo 2025',
+        desc: 'Elegantes, rodeadas de flores y con sonrisas orgullosas: una celebraciÃ³n especial se vuelve todavÃ­a mÃ¡s bonita al compartirla.' },
+      { id: 9,  cat: 'especiales', titulo: 'Una selfie llena de complicidad',                          fecha: '',
         img: '20251026_183112.jpg', alto: 'h-64',
-        desc: 'Un domingo lento, con el sol entre los árboles. A veces la felicidad es simplemente quedarse quieto.' },
-      { id: 10, cat: 'amigos',     titulo: 'Juntos, otra vez',          fecha: 'Diciembre 2024',
+        desc: 'Una sonrisa en primer plano y alguien posando detrÃ¡s: una selfie improvisada que conserva la alegrÃ­a de estar juntos.' },
+      { id: 10, cat: 'amigos',     titulo: 'Un momento sin poses',                          fecha: '',
         img: '20251124_072701.jpg', alto: 'h-80',
-        desc: 'Reencuentro de fin de año. Pasó el tiempo, pero la complicidad seguía intacta.' },
-      { id: 11, cat: 'especiales', titulo: 'Rumbo a la costa',          fecha: 'Enero 2025',
+        desc: 'Una foto casual y sin apuros, de esas que no necesitan estar perfectamente encuadradas para sentirse cercanas y autÃ©nticas.' },
+      { id: 11, cat: 'especiales', titulo: 'Una pausa tranquila',                          fecha: '',
         img: '20251201_115614.jpg', alto: 'h-72',
-        desc: 'Mar, arena y cero prisa. Guardamos el sonido de las olas como banda sonora del verano.' },
-      { id: 12, cat: 'viajes',     titulo: 'Ruta sin destino',          fecha: 'Febrero 2025',
+        desc: 'Un instante de descanso, envuelto en mantas y lejos del ruido. A veces el mejor plan es simplemente quedarse quieto.' },
+      { id: 12, cat: 'viajes',     titulo: 'Una mirada que lo dice todo',                          fecha: '',
         img: 'IMG-20250916-WA0016.jpeg', alto: 'h-64',
-        desc: 'Mochila al hombro y la curiosidad por delante. Ese viaje nos enseñó a disfrutar el camino.' },
-      { id: 13, cat: 'especiales', titulo: 'Un recuerdo especial',      fecha: 'Septiembre 2025',
+        desc: 'Una captura espontÃ¡nea y algo misteriosa: entre la luz tenue y la mirada a cÃ¡mara, queda la sensaciÃ³n de estar compartiendo un momento muy propio.' },
+      { id: 13, cat: 'especiales', titulo: 'Un descanso sin apuros',                          fecha: '',
         img: 'IMG-20251010-WA0090.jpeg', alto: 'h-80',
-        desc: 'Un instante para volver a mirar y recordar.' },
-      { id: 14, cat: 'especiales', titulo: 'Un día para recordar',      fecha: 'Junio 2024',
+        desc: 'Entre las mantas y la quietud, este momento transmite esa paz sencilla de poder descansar un rato y dejar pasar el dÃ­a.' },
+      { id: 14, cat: 'especiales', titulo: 'Desde los primeros recuerdos',                          fecha: '',
         img: 'Screenshot_20240608-221700_Instagram.jpg', alto: 'h-72',
-        desc: 'Un instante para volver a mirar y recordar.' },
-      { id: 15, cat: 'especiales', titulo: 'Un momento juntos',         fecha: 'Junio 2024',
+        desc: 'Una imagen de cuando eras pequeÃ±a, guardada como una ventanita a los comienzos. Hay recuerdos que conmueven con solo volver a mirarlos.' },
+      { id: 15, cat: 'especiales', titulo: 'Un retrato con toque divertido',                          fecha: '',
         img: 'Screenshot_20240623-192805_Gallery.jpg', alto: 'h-80',
-        desc: 'Un instante para volver a mirar y recordar.' },
-      { id: 16, cat: 'especiales', titulo: 'Un recuerdo más',            fecha: 'Agosto 2025',
+        desc: 'Un selfie casual con el cabello al frente y un sticker de hÃ¡mster que le aÃ±ade un toque juguetÃ³n. Un recuerdo sencillo que saca una sonrisa.' },
+      { id: 16, cat: 'especiales', titulo: 'Una sonrisa que ilumina',                          fecha: '',
         img: 'Screenshot_20250811_221300_Gallery.jpg', alto: 'h-72',
-        desc: 'Mochila al hombro y la curiosidad por delante. Ese viaje nos enseñó a disfrutar el camino.' },
+        desc: 'Con la sudadera roja y una mirada serena a la cÃ¡mara, este retrato guarda un instante cercano, de esos que se sienten personales.' },
+      { id: 17, cat: 'especiales', titulo: 'Un retrato de cerca', fecha: '',
+        img: 'IMG-20251027-WA0030.jpg', alto: 'h-96',
+        desc: 'Un abrazo y un ramo de flores acompaÃ±an este retrato de una ocasiÃ³n especial, lleno de orgullo y cariÃ±o.' },
+      { id: 18, cat: 'especiales', titulo: 'Flores y un abrazo', fecha: '',
+        img: 'IMG-20251027-WA0031.jpg', alto: 'h-96',
+        desc: 'Una foto en familia con un ramo entre las manos. La sonrisa compartida hace que este instante se sienta aÃºn mÃ¡s cercano.' },
+      { id: 19, cat: 'especiales', titulo: 'Un dÃ­a para celebrar', fecha: '',
+        img: 'IMG-20251027-WA0032.jpg', alto: 'h-96',
+        desc: 'Un escenario decorado con flores y dos generaciones juntas: un recuerdo de celebraciÃ³n que merece quedarse en la galerÃ­a.' },
+      { id: 20, cat: 'especiales', titulo: 'Una sonrisa en azul y amarillo', fecha: '',
+        img: 'Screenshot_20260424_180619_Gallery.jpg', alto: 'h-80',
+        desc: 'Una selfie espontÃ¡nea, una sonrisa suave y un corazÃ³n que acompaÃ±a el momento: un recuerdo alegre y cercano.' },
+      { id: 21, cat: 'especiales', titulo: 'TradiciÃ³n en cada detalle', fecha: '',
+        img: 'Screenshot_20261014_234703_Drive.jpg', alto: 'h-96',
+        desc: 'El sombrero colorido, las trenzas y el traje rojo destacan en este retrato lleno de identidad y orgullo.' },
+      { id: 22, cat: 'especiales', titulo: 'Una pequeÃ±a sorpresa', fecha: '',
+        img: 'Screenshot_20261026_222203_TikTok(1).jpg', alto: 'h-72',
+        desc: 'Un filtro divertido transforma la foto en un personaje adorable. Imposible verla sin sonreÃ­r.' },
+      { id: 23, cat: 'especiales', titulo: 'Un saludo entre sonrisas', fecha: '',
+        img: 'IMG-20240602-WA0037.jpg', alto: 'h-80',
+        desc: 'Una videollamada, corazones dibujados y una flor pixelada: una captura llena de cariÃ±o, incluso a la distancia.' },
+      { id: 24, cat: 'especiales', titulo: 'Un rincÃ³n lleno de detalles', fecha: '',
+        img: 'IMG-20240602-WA0041.jpg', alto: 'h-72',
+        desc: 'Un pequeÃ±o estuche abierto y algunos objetos de todos los dÃ­as componen una escena sencilla, con un toque divertido.' },
+      { id: 25, cat: 'especiales', titulo: 'Rizos bajo la luz', fecha: '',
+        img: 'IMG-20240606-WA0065.jpg', alto: 'h-80',
+        desc: 'La luz se enreda en los rizos y convierte este retrato cercano en un recuerdo lleno de textura y personalidad.' },
+      { id: 26, cat: 'especiales', titulo: 'Un cumpleaÃ±os en familia', fecha: '',
+        img: 'IMG-20240607-WA0029.jpg', alto: 'h-96',
+        desc: 'La familia se reÃºne alrededor de una torta para celebrar. Una foto que guarda abrazos, compaÃ±Ã­a y una ocasiÃ³n especial.' },
+      { id: 27, cat: 'especiales', titulo: 'Una sonrisa de graduaciÃ³n', fecha: '',
+        img: 'IMG-20240607-WA0036.jpg', alto: 'h-96',
+        desc: 'Un retrato escolar de graduaciÃ³n que conserva la alegrÃ­a de una etapa importante y de todo lo que estaba por venir.' },
+      { id: 28, cat: 'especiales', titulo: 'Rizos y un amigo peludo', fecha: '',
+        img: 'IMG-20240616-WA0020.jpg', alto: 'h-96',
+        desc: 'Un collage de rizos y un perrito esponjoso: dos protagonistas adorables en una imagen que invita a sonreÃ­r.' },
+      { id: 29, cat: 'especiales', titulo: 'Una mirada de cerca', fecha: '',
+        img: 'IMG-20240616-WA0032.jpg', alto: 'h-72',
+        desc: 'Un primer plano que deja que la mirada hable por sÃ­ sola. Ãntimo, sencillo y sin necesidad de adornos.' },
+      { id: 30, cat: 'especiales', titulo: 'Un retrato con un toque juguetÃ³n', fecha: '',
+        img: 'IMG-20240626-WA0004.jpg', alto: 'h-96',
+        desc: 'Los rizos ocupan casi toda la foto y un pequeÃ±o sticker inesperado le suma humor al retrato.' },
+      { id: 31, cat: 'especiales', titulo: 'Un dÃ­a de cabello bonito', fecha: '',
+        img: 'IMG-20240626-WA0034.jpg', alto: 'h-96',
+        desc: 'Una foto espontÃ¡nea que celebra los rizos, el brillo del cabello y esos detalles cotidianos que tambiÃ©n nos representan.' },
+      { id: 32, cat: 'especiales', titulo: 'La familia alrededor de la torta', fecha: '',
+        img: 'IMG-20250724-WA0011.jpg', alto: 'h-96',
+        desc: 'Una celebraciÃ³n en casa, con una torta al centro y la familia reunida para compartir un momento feliz.' },
+      { id: 33, cat: 'especiales', titulo: 'Una selfie de noche', fecha: '',
+        img: 'IMG-20250808-WA0002.jpg', alto: 'h-80',
+        desc: 'Una selfie casual con una expresiÃ³n tranquila: un instante sencillo guardado tal como se viviÃ³.' },
+      { id: 34, cat: 'especiales', titulo: 'Un peluche con cara de pocos amigos', fecha: '',
+        img: 'IMG-20250920-WA0011.jpg', alto: 'h-96',
+        desc: 'Este gatito de peluche parece tener una opiniÃ³n muy clara sobre la foto. Un pequeÃ±o detalle que le da personalidad al recuerdo.' },
+      { id: 35, cat: 'especiales', titulo: 'Una sonrisa entre almohadas', fecha: '',
+        img: 'IMG-20250923-WA0003.jpg', alto: 'h-80',
+        desc: 'Recostada y cÃ³moda, con una sonrisa discreta: un retrato casero que transmite calma y cercanÃ­a.' },
+      { id: 36, cat: 'especiales', titulo: 'Un cumpleaÃ±os compartido', fecha: '',
+        img: 'IMG-20250923-WA0005.jpg', alto: 'h-96',
+        desc: 'Amigos y familia se juntan alrededor de la torta. Lo mÃ¡s bonito de la celebraciÃ³n es tener a todos cerca.' },
+      { id: 37, cat: 'especiales', titulo: 'Una foto desde la pantalla', fecha: '',
+        img: 'IMG-20250923-WA0007.jpg', alto: 'h-80',
+        desc: 'Un retrato capturado desde otra pantalla, con una camiseta amarilla que llena la escena de color.' },
+      { id: 38, cat: 'especiales', titulo: 'Un retrato entre flores', fecha: '',
+        img: 'IMG-20250923-WA0018.jpg', alto: 'h-96',
+        desc: 'El vestido oscuro bordado y el fondo de flores hacen de este retrato un recuerdo elegante y especial.' },
+      { id: 39, cat: 'especiales', titulo: 'Trenzas para recordar', fecha: '',
+        img: 'IMG-20250923-WA0042.jpg', alto: 'h-96',
+        desc: 'Las trenzas decoradas enmarcan el rostro y convierten este retrato en una imagen llena de estilo y personalidad.' },
+      { id: 40, cat: 'especiales', titulo: 'Una visita inesperada', fecha: '',
+        img: 'IMG-20251004-WA0025.jpg', alto: 'h-80',
+        desc: 'Un gatito de peluche aparece con una expresiÃ³n tan seria que termina siendo el protagonista divertido de la foto.' },
+      { id: 41, cat: 'especiales', titulo: 'Un filtro para reÃ­rse', fecha: '',
+        img: 'IMG-20251004-WA0037.jpg', alto: 'h-80',
+        desc: 'Un filtro exagera los rasgos y transforma una selfie normal en una imagen imposible de tomar en serio.' },
+      { id: 42, cat: 'especiales', titulo: 'Una selfie con trenzas', fecha: '',
+        img: 'IMG-20251004-WA0038.jpg', alto: 'h-96',
+        desc: 'Trenzas finas, rizos sueltos y una mirada directa a la cÃ¡mara: un retrato natural lleno de encanto.' },
     ];
 
     /* ==========================================================
        2. ESTADO Y UTILIDADES
        ========================================================== */
     const NOMBRES_CAT = {
-      viajes: 'Viajes', cumpleanos: 'Cumpleaños', amigos: 'Amigos', especiales: 'Momentos Especiales'
+      viajes: 'Viajes', cumpleanos: 'CumpleaÃ±os', amigos: 'Amigos', especiales: 'Momentos Especiales'
     };
 
     let filtroActual = 'todos';
     let visibles = [];       // recuerdos actualmente mostrados (para navegar en el modal)
-    let indiceModal = -1;    // posición del recuerdo abierto dentro de "visibles"
+    let indiceModal = -1;    // posiciÃ³n del recuerdo abierto dentro de "visibles"
 
     // "Me gusta": se guarda en localStorage para que persistan al recargar
     const LS_KEY = 'galeria-recuerdos-likes';
@@ -276,7 +369,7 @@
     const grid = $('#grid');
 
     /* ==========================================================
-       3. RENDER DE LA GALERÍA
+       3. RENDER DE LA GALERÃA
        ========================================================== */
     function renderGrid() {
       visibles = recuerdos.filter(r => filtroActual === 'todos' || r.cat === filtroActual);
@@ -297,7 +390,7 @@
                    '<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23F1E9DD%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23C9A66B%22 font-size=%2224%22 text-anchor=%22middle%22>Recuerdo</text></svg>'
                  )}'" />
 
-            <!-- Capa con título y fecha (aparece al hacer hover) -->
+            <!-- Capa con tÃ­tulo y fecha (aparece al hacer hover) -->
             <div class="absolute inset-0 bg-gradient-to-t from-tinta/80 via-tinta/10 to-transparent
                         opacity-0 group-hover:opacity-100 transition-opacity duration-500
                         flex flex-col justify-end p-5">
@@ -306,7 +399,7 @@
               <p class="text-xs text-white/70 mt-0.5">${r.fecha}</p>
             </div>
 
-            <!-- Botón de me gusta -->
+            <!-- BotÃ³n de me gusta -->
             <button data-like="${r.id}" aria-label="Me gusta"
                     class="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full
                            bg-white/90 backdrop-blur text-xs font-medium shadow hover:bg-white transition">
@@ -319,7 +412,7 @@
     }
 
     /* ==========================================================
-       4. FILTRADO POR CATEGORÍA
+       4. FILTRADO POR CATEGORÃA
        ========================================================== */
     function marcarFiltroActivo() {
       document.querySelectorAll('.filtro-btn').forEach(b =>
@@ -335,7 +428,7 @@
     });
 
     /* ==========================================================
-       5. ME GUSTA (corazón + contador)
+       5. ME GUSTA (corazÃ³n + contador)
        ========================================================== */
     function alternarLike(id) {
       const l = likes[id];
@@ -345,7 +438,7 @@
       actualizarLikeUI(id, true);
     }
 
-    // Actualiza tarjeta y modal (si está abierto con ese recuerdo)
+    // Actualiza tarjeta y modal (si estÃ¡ abierto con ese recuerdo)
     function actualizarLikeUI(id, animar = false) {
       const l = likes[id];
 
@@ -397,7 +490,7 @@
       abrirModal((indiceModal + dir + visibles.length) % visibles.length);
     }
 
-    // Clics dentro del grid (abrir modal o dar like) — delegación de eventos
+    // Clics dentro del grid (abrir modal o dar like) â€” delegaciÃ³n de eventos
     grid.addEventListener('click', (e) => {
       const likeBtn = e.target.closest('[data-like]');
       if (likeBtn) { e.stopPropagation(); alternarLike(Number(likeBtn.dataset.like)); return; }
